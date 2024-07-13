@@ -1,6 +1,6 @@
 "use client";
 
-import { SignOutAction } from "@/actions/auth.action";
+import { signOutAction } from "@/actions/auth.action";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,10 +15,10 @@ export type UserDropdownProps = PropsWithChildren<{}>;
 export const UserDropdown = ({ children }: UserDropdownProps) => {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{children}</DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => SignOutAction()}>
-          <LogOut className="mr-2" />
+        <DropdownMenuItem onClick={() => signOutAction(null)}>
+          <LogOut size={16} className="mr-2" />
           Se déconnecter
         </DropdownMenuItem>
       </DropdownMenuContent>

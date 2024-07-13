@@ -6,19 +6,24 @@ import { Typography } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import type { ErrorParams } from "@/types/next";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function RouteError({ error, reset }: ErrorParams) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
   return (
     <PageLayout className="flex h-screen max-w-md flex-col items-start justify-center gap-3">
       <Typography variant="code">400</Typography>
-      <Typography variant="h1">Oh No! Unexpected Error.</Typography>
+      <Typography variant="h1">Une erreur est survenue</Typography>
       <Typography variant="base">
-        It seems we're experiencing some technical difficulties. Not to worry,
-        our team is working on it. In the meantime, try refreshing the page or
-        visiting us a bit later.
+        Il semble que nous rencontrons quelques difficultés techniques. Pas de
+        panique, notre équipe travaille dessus. En attendant, essayez de
+        rafraîchir la page ou de revenir un peu plus tard.
       </Typography>
       <Link href="/" className={cn(buttonVariants(), "mt-5")}>
-        Go back home
+        Retourner à l'accueil
       </Link>
     </PageLayout>
   );

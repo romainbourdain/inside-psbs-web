@@ -7,10 +7,11 @@ import { cva } from "class-variance-authority";
 const cardVariants = cva("rounded-lg shadow-sm", {
   variants: {
     variant: {
-      default: "bg-card text-card-foreground",
+      default: "border bg-card text-card-foreground",
       background: "text-background-foreground border bg-background",
-      error: "bg-destructive text-destructive-foreground",
-      success: "bg-success text-success-foreground",
+      destructive:
+        "border border-destructive bg-destructive/10 text-destructive",
+      success: "border border-success bg-success/10 text-success",
     },
   },
   defaultVariants: {

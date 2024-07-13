@@ -7,8 +7,8 @@ export const env = createEnv({
    * Will throw if you access these variables on the client.
    */
   server: {
-    API_URL: z.string().url(),
     AUTH_SECRET: z.string(),
+    API_URL: z.string(),
   },
   /*
    * Environment variables available on the client (and server).
@@ -23,7 +23,7 @@ export const env = createEnv({
    * 💡 You'll get type errors if not all variables from `server` & `client` are included here.
    */
   runtimeEnv: {
-    API_URL: process.env.API_URL,
     AUTH_SECRET: process.env.AUTH_SECRET,
+    API_URL: process.env.API_URL,
   },
 });
