@@ -22,4 +22,4 @@ export const fouailleSchema = z.object({
   ),
 });
 
-export type fouailleType = z.infer<typeof fouailleSchema>;
+export type FouailleData = z.infer<typeof fouailleSchema>;

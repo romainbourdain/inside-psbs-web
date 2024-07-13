@@ -17,6 +17,7 @@ export const Header = () => {
         <Typography variant="h3">InsidePSBS</Typography>
       </Link>
       <div className="flex items-center space-x-2">
+        {" "}
         <ThemeToggle />
         <UserButton />
       </div>

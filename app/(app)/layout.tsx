@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default async function RouteLayout({ children }: LayoutParams<{}>) {
   const session = await auth();
 
-  if (!session) redirect("/");
+  if (!session) redirect("/auth/sign-in");
   return (
     <div className="grid h-screen grid-cols-1 grid-rows-[auto_1fr] lg:grid-cols-[20%_1fr] xl:grid-cols-[15%_1fr]">
       <Header />

@@ -1,68 +1,77 @@
-import type { User as NextAuthUser } from "next-auth";
+import { LoginSchema } from "@/schemas/auth.schema";
 import NextAuth, { CredentialsSignin } from "next-auth";
-import type { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { env } from "./env";
 
 class InvalidLoginError extends CredentialsSignin {
   code = "Invalid identifier or password";
 }
 
-interface ExtendedUser extends NextAuthUser {
-  id: string;
-  user_name: string;
-  token: string;
-}
-
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    CredentialsProvider({
-      credentials: {
-        email: {},
-        password: {},
-      },
-      authorize: async (credentials) => {
-        const res = await fetch(`${env.API_URL}/api/login`, {
-          method: "POST",
-          body: JSON.stringify(credentials),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new InvalidLoginError();
-        }
-
-        return { ...data.user, token: data.token };
-      },
-    }),
-  ],
-  callbacks: {
-    jwt({ token, user }) {
-      const currentUser = user as ExtendedUser | null;
-      if (currentUser) {
-        token.id = currentUser.id;
-        token.user_name = currentUser.user_name;
-        token.auth_token = currentUser.token;
+const providers = [
+  CredentialsProvider({
+    credentials: {
+      email: {},
+      password: {},
+    },
+    authorize: async (credentials) => {
+      const validateField = LoginSchema.safeParse(credentials);
+      if (!validateField.success) {
+        return null;
       }
 
+      // const res = await fetch(`${env.API_URL}/api/login`, {
+      //   method: "POST",
+      //   body: JSON.stringify(validateField.data),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+
+      const res = { ok: false, json: async () => ({ user: {}, token: "" }) };
+
+      console.log("authorize");
+      if (!res.ok) {
+        return null;
+      }
+
+      const data = await res.json();
+
+      return { ...data.user, token: data.token };
+    },
+  }),
+];
+
+export const providerMap = providers.map((provider) => {
+  if (typeof provider === "function") {
+    const providerData = (provider as Function)();
+    return { id: providerData.id, name: providerData.name };
+  } else {
+    return { id: provider.id, name: provider.name };
+  }
+});
+
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers,
+  session: { strategy: "jwt" },
+  callbacks: {
+    jwt({ token, user }) {
+      console.log("jwt");
+      // eslint-disable-next-line
+      if (user?.id) {
+        token.id = user.id;
+        token.user_name = user.user_name;
+        token.auth_token = user.token;
+      }
       return token;
     },
-
     session({ session, token }) {
-      const currentToken = token as JWT & {
-        id: string;
-        user_name: string;
-        auth_token: string;
-      };
-
-      session.user.id = currentToken.id;
-      session.user.user_name = currentToken.user_name as string;
-      session.user.token = currentToken.auth_token;
+      console.log("session");
+      session.user.id = token.id;
+      session.user.user_name = token.user_name as string;
+      session.user.token = token.auth_token;
       return session;
     },
+  },
+  pages: {
+    signIn: "/auth/sign-in",
   },
 });

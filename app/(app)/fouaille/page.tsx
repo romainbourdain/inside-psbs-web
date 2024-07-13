@@ -1,7 +1,7 @@
-import { getFouailleAction } from "@/actions/fouaille.action";
 import { PageLayout } from "@/components/tailwind/page-layout";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Typography } from "@/components/ui/typography";
+import { FouailleChart } from "@/features/fouaille/fouaille-chart";
 import type { PageParams } from "@/types/next";
 
 const data = {
@@ -118,8 +118,25 @@ const data = {
   ],
 };
 
+const getOrdersMoney = () => {
+  let money_available = parseInt(data.balance) + 50;
+
+  return data.orders.map((o) => {
+    money_available += parseInt(o.total_price);
+    return {
+      money: money_available,
+      date: new Date(o.date).toLocaleDateString("FR-fr", {
+        month: "short",
+        day: "numeric",
+      }),
+    };
+  });
+};
+
 export default async function RoutePage(props: PageParams<{}>) {
-  await getFouailleAction(null);
+  // await getFouailleAction(null);
+
+  const orders = getOrdersMoney();
   return (
     <PageLayout>
       <Typography variant="h2">Fouaille</Typography>
@@ -128,6 +145,9 @@ export default async function RoutePage(props: PageParams<{}>) {
           <CardTitle>{data.balance}</CardTitle>
         </CardHeader>
       </Card>
+      <div className="">
+        <FouailleChart data={orders} />
+      </div>
     </PageLayout>
   );
 }

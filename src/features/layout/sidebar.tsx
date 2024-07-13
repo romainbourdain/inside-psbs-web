@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -36,11 +36,11 @@ export const Sidebar = () => {
             Settings
           </NavLink>
         </div>
-        <Button>
-          <CirclePlus className="mr-1" size={20} />
-          Publier
-        </Button>
       </nav>
+      <Link href="/create/post" className={buttonVariants({ size: "sm" })}>
+        <CirclePlus className="mr-2" size={20} />
+        Publier
+      </Link>
     </aside>
   );
 };
@@ -49,7 +49,7 @@ const NavLink = forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a"> & { icon: LucideIcon }
 >(({ href, className, icon: Icon, children, ...props }, ref) => {
-  const [segment] = useSelectedLayoutSegments();
+  const [segment] = useSelectedLayoutSegments() ?? [];
   const isActive = href === `/${segment}`;
 
   return (
