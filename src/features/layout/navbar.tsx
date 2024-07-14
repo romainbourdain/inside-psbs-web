@@ -1,13 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { UserButton } from "../auth/user-button";
-import { ThemeToggle } from "../theme/theme-toggle";
+import type { PropsWithChildren } from "react";
 
-export type NavbarProps = {
-  showUserButton?: boolean;
-};
+export type NavbarProps = PropsWithChildren<{}>;
 
-export const Navbar = ({ showUserButton }: NavbarProps) => {
+export const Navbar = ({ children }: NavbarProps) => {
   return (
     <nav className="col-span-full flex w-full items-center justify-between gap-2 border-b px-5 py-3">
       <Link href="/" className="flex items-center gap-3">
@@ -19,10 +16,7 @@ export const Navbar = ({ showUserButton }: NavbarProps) => {
         />
         <span className="text-lg font-semibold">Inside PSBS</span>
       </Link>
-      <div className="flex items-center gap-2">
-        <ThemeToggle />
-        {showUserButton && <UserButton />}
-      </div>
+      <div className="flex items-center gap-2">{children}</div>
     </nav>
   );
 };

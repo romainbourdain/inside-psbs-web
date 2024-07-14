@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import type { VariantProps } from "class-variance-authority";
 import { cva } from "class-variance-authority";
 
-const cardVariants = cva("rounded-lg shadow-sm", {
+export const cardVariants = cva("rounded-lg", {
   variants: {
     variant: {
       default: "border bg-card text-card-foreground",
@@ -12,6 +12,8 @@ const cardVariants = cva("rounded-lg shadow-sm", {
       destructive:
         "border border-destructive bg-destructive/10 text-destructive",
       success: "border border-success bg-success/10 text-success",
+      clickable:
+        "cursor-pointer border bg-card text-card-foreground transition-colors hover:bg-accent",
     },
   },
   defaultVariants: {
