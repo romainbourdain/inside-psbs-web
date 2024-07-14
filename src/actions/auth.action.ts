@@ -4,7 +4,6 @@ import { signIn, signOut } from "@/lib/auth";
 import { env } from "@/lib/env";
 import { action } from "@/lib/safe-actions";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import bcrypt from "bcryptjs";
 import { AuthError } from "next-auth";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -70,7 +69,8 @@ export const registerAction = action
     if (!existingPhone?.data)
       return { error: "Le numéro de téléphone entré est déjà utilisé" };
 
-    const hashedPassword = await bcrypt.hash(parsedInput.password, 10);
+    // TODO: Hash the password
+    // const hashedPassword = await bcrypt.hash(parsedInput.password, 10);
 
     const res = await fetch(`${env.API_URL}/api/register`, {
       method: "POST",
@@ -79,8 +79,6 @@ export const registerAction = action
       },
       body: JSON.stringify({
         ...parsedInput,
-        password: hashedPassword,
-        password_confirmation: hashedPassword,
       }),
     });
     if (!res.ok)

@@ -9,7 +9,7 @@ export type NavbarProps = {
 
 export const Navbar = ({ showUserButton }: NavbarProps) => {
   return (
-    <nav className="flex w-full items-center justify-between gap-2 border-b px-5 py-3">
+    <nav className="col-span-full flex w-full items-center justify-between gap-2 border-b px-5 py-3">
       <Link href="/" className="flex items-center gap-3">
         <Image
           src="/images/logo.svg"

@@ -16,7 +16,7 @@ export const LoginSchema = z.object({
     sector_id: z.number(),
     email: z.string().email(),
     phone: z.string(),
-    promotion_year: z.number().int(),
+    promotion_year: z.string(),
     created_at: z.string(),
     updated_at: z.string(),
   }),

@@ -33,7 +33,7 @@ export const LoginForm = ({ csrfToken }: LoginFormProps) => {
 
   const onSubmit = async (values: LoginData) => {
     const res = await signInWithEmailAndPasswordAction(values);
-    if (!res?.data) return setError("Something went wrong");
+    if (!res?.data) return setError("Une erreur est survenue");
 
     setError(res.data.error);
     setSuccess(res.data.success);

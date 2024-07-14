@@ -1,5 +1,4 @@
 import { LoginFormSchema, LoginSchema } from "@/schemas/auth.schema";
-import bcrypt from "bcryptjs";
 import type { NextAuthConfig } from "next-auth";
 import { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -12,16 +11,13 @@ class InvalidLoginError extends CredentialsSignin {
 export const authConfig = {
   providers: [
     Credentials({
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
-      },
       async authorize(credentials) {
         const validatedFields = LoginFormSchema.safeParse(credentials);
         if (!validatedFields.success) return null;
 
         const { email, password } = validatedFields.data;
-        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //TODO: Hash the password
 
         const res = await fetch(`${env.API_URL}/api/login`, {
           method: "POST",
@@ -30,7 +26,7 @@ export const authConfig = {
           },
           body: JSON.stringify({
             email,
-            password: hashedPassword,
+            password,
           }),
         });
         if (!res.ok) {
@@ -47,7 +43,11 @@ export const authConfig = {
         const parsedData = LoginSchema.safeParse(data);
         if (!parsedData.success) return null;
 
-        return parsedData.data.user;
+        return {
+          ...parsedData.data.user,
+          id: parsedData.data.user.id.toString(),
+          token: parsedData.data.token,
+        };
       },
     }),
   ],

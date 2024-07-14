@@ -17,7 +17,9 @@ export const UserButton = async () => {
           src={session.user.image || ""}
           alt={session.user.name || "user profile picture"}
         />
-        <AvatarFallback>{session.user.name?.[0]}</AvatarFallback>
+        <AvatarFallback>
+          {session.user.user_name[0].toUpperCase()}
+        </AvatarFallback>
       </Avatar>
     </UserDropdown>
   );
